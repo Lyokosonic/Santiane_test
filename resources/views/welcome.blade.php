@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>Voyages</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -62,7 +62,18 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+            table, td, th {
+                border: 1px solid;
+            }
+            td,th {
+                padding: 5px 10px !important;
+            }
         </style>
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     </head>
     <body>
         <div class="flex-center position-ref full-height">
@@ -79,15 +90,82 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel
+                    Voyages
                 </div>
-
-                <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                <div class="row">
+                    <div>
+                        <h2>Plane</h2>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>number</th>
+                                <th>departure</th>
+                                <th>arrival</th>
+                                <th>seat</th>
+                                <th>gate</th>
+                                <th>baggage_drop</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($voyages_plane as $voyage)
+                                <tr>
+                                    <td>{{$voyage->number}}</td>
+                                    <td>{{$voyage->departure}}</td>
+                                    <td>{{$voyage->arrival}}</td>
+                                    <td>{{$voyage->seat}}</td>
+                                    <td>{{$voyage->gate}}</td>
+                                    <td>{{$voyage->baggage_drop}}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <h2>Bus</h2>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>number</th>
+                                <th>departure</th>
+                                <th>arrival</th>
+                                <th>seat</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($voyages_bus as $voyage)
+                                <tr>
+                                    <td>{{$voyage->number}}</td>
+                                    <td>{{$voyage->departure}}</td>
+                                    <td>{{$voyage->arrival}}</td>
+                                    <td>{{$voyage->seat}}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <h2>Train</h2>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>number</th>
+                                <th>departure</th>
+                                <th>arrival</th>
+                                <th>seat</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($voyages_bus as $voyage)
+                                <tr>
+                                    <td>{{$voyage->number}}</td>
+                                    <td>{{$voyage->departure}}</td>
+                                    <td>{{$voyage->arrival}}</td>
+                                    <td>{{$voyage->seat}}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
