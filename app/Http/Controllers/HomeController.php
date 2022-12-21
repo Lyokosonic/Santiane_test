@@ -17,6 +17,24 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
+    public function create()
+    {
+        $travel = new \App\Voyages;
+        $travel->type = request('type');
+        $travel->number = request('number');
+        $travel->departure = request('departure');
+        $travel->arrival = request('arrival');
+        $travel->seat = request('seat');
+        $travel->gate = request('gate');
+        $travel->baggage_drop = request('baggage_drop');
+        $travel->departure_date = request('departure_date');
+        $travel->arrival_date = request('arrival_date');
+
+        $travel->save();
+
+        return redirect('/');
+    }
+
     /**
      * Show the application dashboard.
      *

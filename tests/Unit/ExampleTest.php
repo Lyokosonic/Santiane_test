@@ -15,6 +15,14 @@ class ExampleTest extends TestCase
      */
     public function testBasicTest()
     {
-        $this->assertTrue(true);
+        $response = $this->post('home', [
+            'type'    => 'bus',
+            'number'  => '123456789',
+            'departure'    => 'Cannes',
+            'arrival'   => 'Antibes',
+            'departure_date'   => '2022-12-30 20:00:00',
+            'arrival_date'   => '2022-12-30 20:30:00',
+        ]);
+        $response->assertStatus(302);
     }
 }

@@ -21,10 +21,8 @@
 
                             <div class="form-group{{ $errors->has('type') ? ' has-error' : '' }}">
                                 <label for="type" class="col-md-4 control-label">Type</label>
-
                                 <div class="col-md-6">
                                     <input id="type" type="text" class="form-control" name="type" value="{{ old('type') }}" required autofocus>
-
                                     @if ($errors->has('type'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('type') }}</strong>
@@ -35,10 +33,8 @@
 
                             <div class="form-group{{ $errors->has('number') ? ' has-error' : '' }}">
                                 <label for="number" class="col-md-4 control-label">Number</label>
-
                                 <div class="col-md-6">
                                     <input id="number" type="text" class="form-control" name="number" value="{{ old('number') }}" required>
-
                                     @if ($errors->has('number'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('number') }}</strong>
@@ -49,10 +45,8 @@
 
                             <div class="form-group{{ $errors->has('departure') ? ' has-error' : '' }}">
                                 <label for="departure" class="col-md-4 control-label">Departure</label>
-
                                 <div class="col-md-6">
                                     <input id="departure" type="text" class="form-control" name="departure" value="{{ old('departure') }}" required>
-
                                     @if ($errors->has('departure'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('departure') }}</strong>
@@ -63,10 +57,8 @@
 
                             <div class="form-group{{ $errors->has('arrival') ? ' has-error' : '' }}">
                                 <label for="arrival" class="col-md-4 control-label">Arrival</label>
-
                                 <div class="col-md-6">
                                     <input id="arrival" type="text" class="form-control" name="arrival" value="{{ old('arrival') }}" required>
-
                                     @if ($errors->has('arrival'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('arrival') }}</strong>
@@ -77,10 +69,8 @@
 
                             <div class="form-group{{ $errors->has('seat') ? ' has-error' : '' }}">
                                 <label for="seat" class="col-md-4 control-label">Seat (optionnal)</label>
-
                                 <div class="col-md-6">
                                     <input id="seat" type="text" class="form-control" name="seat" value="{{ old('seat') }}">
-
                                     @if ($errors->has('seat'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('seat') }}</strong>
@@ -91,10 +81,8 @@
 
                             <div class="form-group{{ $errors->has('gate') ? ' has-error' : '' }}">
                                 <label for="gate" class="col-md-4 control-label">Gate (optionnal)</label>
-
                                 <div class="col-md-6">
                                     <input id="gate" type="text" class="form-control" name="gate" value="{{ old('gate') }}">
-
                                     @if ($errors->has('gate'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('gate') }}</strong>
@@ -105,10 +93,8 @@
 
                             <div class="form-group{{ $errors->has('baggage_drop') ? ' has-error' : '' }}">
                                 <label for="baggage_drop" class="col-md-4 control-label">Baggage drop (optionnal)</label>
-
                                 <div class="col-md-6">
                                     <input id="baggage_drop" type="text" class="form-control" name="baggage_drop" value="{{ old('baggage_drop') }}">
-
                                     @if ($errors->has('baggage_drop'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('baggage_drop') }}</strong>
@@ -119,10 +105,8 @@
 
                             <div class="form-group{{ $errors->has('departure_date') ? ' has-error' : '' }}">
                                 <label for="departure_date" class="col-md-4 control-label">Departure date</label>
-
                                 <div class="col-md-6">
-                                    <input id="departure_date" type="text" class="form-control" name="departure_date" value="{{ old('departure_date') }}">
-
+                                    <input id="departure_date" type="text" placeholder="yyyy-mm-dd hh:mm:ss" class="form-control" name="departure_date" value="{{ old('departure_date') }}" required>
                                     @if ($errors->has('departure_date'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('departure_date') }}</strong>
@@ -133,10 +117,8 @@
 
                             <div class="form-group{{ $errors->has('arrival_date') ? ' has-error' : '' }}">
                                 <label for="arrival_date" class="col-md-4 control-label">Arrival date</label>
-
                                 <div class="col-md-6">
-                                    <input id="arrival_date" type="text" class="form-control" name="arrival_date" value="{{ old('arrival_date') }}">
-
+                                    <input id="arrival_date" type="text" placeholder="yyyy-mm-dd hh:mm:ss" class="form-control" name="arrival_date" value="{{ old('arrival_date') }}" required>
                                     @if ($errors->has('arrival_date'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('arrival_date') }}</strong>

@@ -93,6 +93,16 @@
                     Voyages
                 </div>
                 <div class="row">
+                    <form type="get" action="{{ url('/') }}">
+                        <div class="col-md-10">
+                            <input class="form-control" type="search" name="search" placeholder="search">
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn" type="submit">Search</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="row">
                     <div>
                         <h2>Plane</h2>
                         <table>
@@ -103,7 +113,10 @@
                                 <th>arrival</th>
                                 <th>seat</th>
                                 <th>gate</th>
-                                <th>baggage_drop</th>
+                                <th>baggage drop</th>
+                                <th>departure date</th>
+                                <th>arrival date</th>
+
                             </tr>
                             </thead>
                             <tbody>
@@ -115,6 +128,8 @@
                                     <td>{{$voyage->seat}}</td>
                                     <td>{{$voyage->gate}}</td>
                                     <td>{{$voyage->baggage_drop}}</td>
+                                    <td>{{$voyage->departure_date}}</td>
+                                    <td>{{$voyage->arrival_date}}</td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -128,7 +143,8 @@
                                 <th>number</th>
                                 <th>departure</th>
                                 <th>arrival</th>
-                                <th>seat</th>
+                                <th>departure date</th>
+                                <th>arrival date</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -137,7 +153,8 @@
                                     <td>{{$voyage->number}}</td>
                                     <td>{{$voyage->departure}}</td>
                                     <td>{{$voyage->arrival}}</td>
-                                    <td>{{$voyage->seat}}</td>
+                                    <td>{{$voyage->departure_date}}</td>
+                                    <td>{{$voyage->arrival_date}}</td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -152,15 +169,19 @@
                                 <th>departure</th>
                                 <th>arrival</th>
                                 <th>seat</th>
+                                <th>departure date</th>
+                                <th>arrival date</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($voyages_bus as $voyage)
+                            @foreach($voyages_train as $voyage)
                                 <tr>
                                     <td>{{$voyage->number}}</td>
                                     <td>{{$voyage->departure}}</td>
                                     <td>{{$voyage->arrival}}</td>
                                     <td>{{$voyage->seat}}</td>
+                                    <td>{{$voyage->departure_date}}</td>
+                                    <td>{{$voyage->arrival_date}}</td>
                                 </tr>
                             @endforeach
                             </tbody>

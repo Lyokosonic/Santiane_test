@@ -20,8 +20,8 @@ class CreateTravelsTable extends Migration
             $table->string('departure');
             $table->string('arrival');
             $table->string('seat')->nullable();
-            $table->string('gate');
-            $table->string('baggage_drop');
+            $table->string('gate')->nullable();
+            $table->string('baggage_drop')->nullable();
             $table->Datetime('departure_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->Datetime('arrival_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamps();
