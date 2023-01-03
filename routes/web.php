@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Http\Request;
+use App\Voyage;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,39 +14,37 @@
 |
 */
 
-Route::get('/', function () {
-    $search_text = request('search');
-    $voyages_plane = DB::table('voyages')
-        ->where([
-            ['type', 'plane'],
-            ['departure', '' . $search_text . ''],
-        ])
-        ->orWhere([
-            ['type', 'plane'],
-            ['arrival', '' . $search_text . ''],
-        ])
-        ->orderBy('departure_date', 'asc')->get();
-    $voyages_bus = DB::table('voyages')
-        ->where([
-            ['type', 'bus'],
-            ['departure', '' . $search_text . ''],
-        ])
-        ->orWhere([
-            ['type', 'bus'],
-            ['arrival', '' . $search_text . ''],
-        ])
-        ->orderBy('departure_date', 'asc')->get();
-    $voyages_train = DB::table('voyages')
-        ->where([
-            ['type', 'train'],
-            ['departure', '' . $search_text . ''],
-        ])
-        ->orWhere([
-            ['type', 'train'],
-            ['arrival', '' . $search_text . ''],
-        ])
-        ->orderBy('departure_date', 'asc')->get();
-    return view('welcome')->with('voyages_plane', $voyages_plane)->with('voyages_bus', $voyages_bus)->with('voyages_train', $voyages_train)->with('search_text', $search_text);
+Route::get('/', function (Request $request) {
+
+    $departureLocation = $request->query('departure_location');
+    $arrivalLocation = $request->query('arrival_location');
+
+    var_dump($departureLocation);
+    var_dump($arrivalLocation);
+
+    if (isset($departureLocation))
+    {
+        if (isset($arrivalLocation))
+        {
+            $voyages = Voyage::with(['steps' => function($query) {
+                $query->orderBy('departure_date', 'asc');
+            }])->whereHas('steps', function($query) use ($departureLocation, $arrivalLocation) {
+                $query->where('departure', 'like', '%' . $departureLocation . '%')
+                    ->where('arrival', 'like', '%' . $arrivalLocation . '%');
+            })->get();
+
+            var_dump($voyages);
+        } else {
+            $voyages = Voyage::with(['steps' => function($query) {
+                $query->orderBy('departure_date', 'asc');
+            }])->get();
+        }
+    } else {
+        $voyages = Voyage::with(['steps' => function($query) {
+            $query->orderBy('departure_date', 'asc');
+        }])->get();
+    }
+    return view('welcome', compact('voyages'));
 });
 
 

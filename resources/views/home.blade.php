@@ -13,128 +13,110 @@
                             {{ session('status') }}
                         </div>
                     @endif
+                    @if (Session::has('errors'))
+                        <div class="alert alert-danger">{{ Session::get('errors') }}</div>
+                    @endif
 
-                    <h4>Create new travel:</h4>
+                    @if (Session::has('success'))
+                        <div class="alert alert-success">{{ Session::get('success') }}</div>
+                    @endif
 
-                        <form class="form-horizontal" method="POST">
+                    <h3>Create new travel:</h3>
+                        <form method="POST">
                             {{ csrf_field() }}
 
-                            <div class="form-group{{ $errors->has('type') ? ' has-error' : '' }}">
-                                <label for="type" class="col-md-4 control-label">Type</label>
-                                <div class="col-md-6">
-                                    <input id="type" type="text" class="form-control" name="type" value="{{ old('type') }}" required autofocus>
-                                    @if ($errors->has('type'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('type') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
+                            <label for="name">Name</label>
+                            <input type="text" name="name" id="name">
 
-                            <div class="form-group{{ $errors->has('number') ? ' has-error' : '' }}">
-                                <label for="number" class="col-md-4 control-label">Number</label>
-                                <div class="col-md-6">
-                                    <input id="number" type="text" class="form-control" name="number" value="{{ old('number') }}" required>
-                                    @if ($errors->has('number'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('number') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
+                            <label for="description">Description</label>
+                            <input type="text" name="description" id="description">
 
-                            <div class="form-group{{ $errors->has('departure') ? ' has-error' : '' }}">
-                                <label for="departure" class="col-md-4 control-label">Departure</label>
-                                <div class="col-md-6">
-                                    <input id="departure" type="text" class="form-control" name="departure" value="{{ old('departure') }}" required>
-                                    @if ($errors->has('departure'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('departure') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
+                            <h4>Etapes</h4>
+                            <div id="steps">
+                                @foreach (session('steps', []) as $index => $step)
+                                    <div class="step">
+                                        <div>
+                                            <label for="steps[{{ $index }}][type]">Type</label>
+                                            <input type="text" name="steps[{{ $index }}][type]" id="steps[{{ $index }}][type]" class="form-control" required>
+                                        </div>
+                                        <div>
+                                            <label for="steps[{{ $index }}][transport_number]">Transport number</label>
+                                            <input type="text" name="steps[{{ $index }}][transport_number]" id="steps[{{ $index }}][transport_number]" class="form-control" required>
+                                        </div>
+                                        <div>
+                                            <label for="steps[{{ $index }}][departure_date]">Departure date</label>
+                                            <input type="datetime-local" name="steps[{{ $index }}][departure_date]" id="steps[{{ $index }}][departure_date]" class="form-control" required>
+                                        </div>
+                                        <div>
+                                            <label for="steps[{{ $index }}][arrival_date]">Arrival date</label>
+                                            <input type="datetime-local" name="steps[{{ $index }}][arrival_date]" id="steps[{{ $index }}][arrival_date]" class="form-control" required>
+                                        </div>
+                                        <div>
+                                            <label for="steps[{{ $index }}][departure]">Departure</label>
+                                            <input type="text" name="steps[{{ $index }}][departure]" id="steps[{{ $index }}][departure]" class="form-control" required>
+                                        </div>
+                                        <div>
+                                            <label for="steps[{{ $index }}][arrival]">Arrival</label>
+                                            <input type="text" name="steps[{{ $index }}][arrival]" id="steps[{{ $index }}][arrival]" class="form-control" required>
+                                        </div>
+                                        <div>
+                                            <label for="steps[{{ $index }}][seat]">Seat</label>
+                                            <input type="text" name="steps[{{ $index }}][seat]" id="steps[{{ $index }}][seat]" class="form-control">
+                                        </div>
+                                        <div>
+                                            <label for="steps[{{ $index }}][gate]">Gate</label>
+                                            <input type="text" name="steps[{{ $index }}][gate]" id="steps[{{ $index }}][gate]" class="form-control">
+                                        </div>
+                                        <div>
+                                            <label for="steps[{{ $index }}][baggage_drop]">Baggage_drop</label>
+                                            <input type="text" name="steps[{{ $index }}][baggage_drop]" id="steps[{{ $index }}][baggage_drop]" class="form-control">
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
+                            <button type="button" onclick="addStep()">Add step</button>
 
-                            <div class="form-group{{ $errors->has('arrival') ? ' has-error' : '' }}">
-                                <label for="arrival" class="col-md-4 control-label">Arrival</label>
-                                <div class="col-md-6">
-                                    <input id="arrival" type="text" class="form-control" name="arrival" value="{{ old('arrival') }}" required>
-                                    @if ($errors->has('arrival'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('arrival') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <div class="form-group{{ $errors->has('seat') ? ' has-error' : '' }}">
-                                <label for="seat" class="col-md-4 control-label">Seat (optionnal)</label>
-                                <div class="col-md-6">
-                                    <input id="seat" type="text" class="form-control" name="seat" value="{{ old('seat') }}">
-                                    @if ($errors->has('seat'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('seat') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <div class="form-group{{ $errors->has('gate') ? ' has-error' : '' }}">
-                                <label for="gate" class="col-md-4 control-label">Gate (optionnal)</label>
-                                <div class="col-md-6">
-                                    <input id="gate" type="text" class="form-control" name="gate" value="{{ old('gate') }}">
-                                    @if ($errors->has('gate'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('gate') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <div class="form-group{{ $errors->has('baggage_drop') ? ' has-error' : '' }}">
-                                <label for="baggage_drop" class="col-md-4 control-label">Baggage drop (optionnal)</label>
-                                <div class="col-md-6">
-                                    <input id="baggage_drop" type="text" class="form-control" name="baggage_drop" value="{{ old('baggage_drop') }}">
-                                    @if ($errors->has('baggage_drop'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('baggage_drop') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <div class="form-group{{ $errors->has('departure_date') ? ' has-error' : '' }}">
-                                <label for="departure_date" class="col-md-4 control-label">Departure date</label>
-                                <div class="col-md-6">
-                                    <input id="departure_date" type="text" placeholder="yyyy-mm-dd hh:mm:ss" class="form-control" name="departure_date" value="{{ old('departure_date') }}" required>
-                                    @if ($errors->has('departure_date'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('departure_date') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <div class="form-group{{ $errors->has('arrival_date') ? ' has-error' : '' }}">
-                                <label for="arrival_date" class="col-md-4 control-label">Arrival date</label>
-                                <div class="col-md-6">
-                                    <input id="arrival_date" type="text" placeholder="yyyy-mm-dd hh:mm:ss" class="form-control" name="arrival_date" value="{{ old('arrival_date') }}" required>
-                                    @if ($errors->has('arrival_date'))
-                                        <span class="help-block">
-                                        <strong>{{ $errors->first('arrival_date') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="col-md-6 col-md-offset-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        Create
-                                    </button>
-                                </div>
-                            </div>
+                            <button type="submit">Create voyage</button>
                         </form>
+                        <script type="text/javascript">
+                            console.log("HERE");
+                            var i = 1;
+                            function addStep() {
+                                console.log("I Click");
+                                const steps = document.getElementById('steps');
+                                const step = document.createElement('div');
+                                step.innerHTML = '<div class="step">' +
+                                    '<h5>Step' + i + '</h5><div><label for="steps[' + i + '][type]">Type</label>' +
+                                    '<input type="text" name="steps[' + i + '][type]" id="steps[' + i + '][type]" class="form-control" required></div>' +
+
+                                    '<div><label for="steps[' + i + '][transport_number]">Transport number</label>' +
+                                    '<input type="text" name="steps[' + i + '][transport_number]" id="steps[' + i + '][transport_number]" class="form-control" required></div>' +
+
+                                    '<div><label for="steps[' + i + '][departure_date]">Departure date</label>' +
+                                    '<input type="datetime-local" name="steps[' + i + '][departure_date]" id="steps[' + i + '][departure_date]" class="form-control" required></div>' +
+
+                                    '<div><label for="steps[' + i + '][arrival_date]">Arrival date</label>' +
+                                    '<input type="datetime-local" name="steps[' + i + '][arrival_date]" id="steps[' + i + '][arrival_date]" class="form-control" required></div>' +
+
+                                    '<div><label for="steps[' + i + '][departure]">Departure</label>' +
+                                    '<input type="text" name="steps[' + i + '][departure]" id="steps[' + i + '][departure]" class="form-control" required></div>' +
+
+                                    '<div><label for="steps[' + i + '][arrival]">Arrival</label>' +
+                                    '<input type="text" name="steps[' + i + '][arrival]" id="steps[' + i + '][arrival]" class="form-control" required></div>' +
+
+                                    '<div><label for="steps[' + i + '][seat]">Seat</label>' +
+                                    '<input type="text" name="steps[' + i + '][seat]" id="steps[' + i + '][seat]" class="form-control"></div>' +
+
+                                    '<div><label for="steps[' + i + '][gate]">Gate</label>' +
+                                    '<input type="text" name="steps[' + i + '][gate]" id="steps[' + i + '][gate]" class="form-control"></div>' +
+
+                                    '<div><label for="steps[' + i + '][baggage_drop]">Baggage drop</label>' +
+                                    '<input type="text" name="steps[' + i + '][baggage_drop]" id="steps[' + i + '][baggage_drop]" class="form-control"></div>' +
+                                    '</div>';
+                                steps.appendChild(step);
+                                i++;
+                            };
+                        </script>
                 </div>
             </div>
         </div>

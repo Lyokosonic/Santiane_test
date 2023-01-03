@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Voyages;
+use Illuminate\Http\Request;
+use App\Voyage;
+use App\Steps;
+use Validator;
 
 class HomeController extends Controller
 {
@@ -17,22 +20,43 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        $travel = new \App\Voyages;
-        $travel->type = request('type');
-        $travel->number = request('number');
-        $travel->departure = request('departure');
-        $travel->arrival = request('arrival');
-        $travel->seat = request('seat');
-        $travel->gate = request('gate');
-        $travel->baggage_drop = request('baggage_drop');
-        $travel->departure_date = request('departure_date');
-        $travel->arrival_date = request('arrival_date');
+        $name = $request->input('name');
+        $description = $request->input('description');
+        $steps = $request->input('steps');
 
-        $travel->save();
+        // Validation des données, etc.
 
-        return redirect('/');
+        // Vérifie si il y a deux étapes qui ont la même ville de départ ou d'arrivée
+        $departures = [];
+        $arrivals = [];
+        foreach ($steps as $step) {
+            $departures[] = $step['departure'];
+            $arrivals[] = $step['arrival'];
+        }
+        if (count(array_unique($departures)) != count($departures) || count(array_unique($arrivals)) != count($arrivals)) {
+            return redirect()->back()->with('errors', 'Il ne faut pas passer deux fois dans la même ville !');
+        }
+
+        $voyage = Voyage::create(['name' => $name, 'description' => $description]);
+
+        foreach ($steps as $step) {
+            Steps::create([
+                'voyage_id' => $voyage->id,
+                'type' => $step['type'],
+                'transport_number' => $step['transport_number'],
+                'departure_date' => $step['departure_date'],
+                'arrival_date' => $step['arrival_date'],
+                'departure' => $step['departure'],
+                'arrival' => $step['arrival'],
+                'seat' => $step['seat'],
+                'gate' => $step['gate'],
+                'baggage_drop' => $step['baggage_drop'],
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Le voyage a été créé avec succès !');
     }
 
     /**

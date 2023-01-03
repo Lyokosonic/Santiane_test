@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTravelsTable extends Migration
+class CreateVoyagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +14,7 @@ class CreateTravelsTable extends Migration
     public function up()
     {
         Schema::create('voyages', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name');
-            $table->text('description')->nullable();
+            $table->increments('id');
             $table->timestamps();
         });
     }

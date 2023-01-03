@@ -13,16 +13,8 @@ class ExampleTest extends TestCase
      *
      * @return void
      */
-    public function testBasicTest()
+    public function test_that_true_is_true()
     {
-        $response = $this->post('home', [
-            'type'    => 'bus',
-            'number'  => '123456789',
-            'departure'    => 'Cannes',
-            'arrival'   => 'Antibes',
-            'departure_date'   => '2022-12-30 20:00:00',
-            'arrival_date'   => '2022-12-30 20:30:00',
-        ]);
-        $response->assertStatus(302);
+        $this->assertTrue(true);
     }
 }

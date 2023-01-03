@@ -4,19 +4,23 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Voyages extends Model
+class Steps extends Model
 {
     protected $fillable = [
         'type',
-        'number',
+        'transport_number',
+        'departure_date',
+        'arrival_date',
         'departure',
         'arrival',
         'seat',
         'gate',
         'baggage_drop',
-        'departure_date',
-        'arrival_date',
+        'voyage_id',
     ];
 
-    public $timestamps = false;
+    public function voyage()
+    {
+        return $this->belongsTo(Voyage::class);
+    }
 }

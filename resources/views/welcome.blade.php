@@ -93,100 +93,53 @@
                     Voyages
                 </div>
                 <div class="row">
-                    <form type="get" action="{{ url('/') }}">
-                        <div class="col-md-10">
-                            <input class="form-control" type="search" name="search" placeholder="search">
-                        </div>
-                        <div class="col-md-2">
-                            <button class="btn" type="submit">Search</button>
-                        </div>
+                    <form action="{{ url('/') }}" method="GET">
+                        {{ csrf_field() }}
+                        <label for="departure_location">Lieu de départ</label>
+                        <input type="search" name="departure_location" id="departure_location" class="form-control">
+
+                        <label for="arrival_location">Lieu d'arrivée</label>
+                        <input type="search" name="arrival_location" id="arrival_location" class="form-control">
+
+                        <button type="submit">Rechercher</button>
                     </form>
                 </div>
                 <div class="row">
-                    <div>
-                        <h2>Plane</h2>
+                    @foreach ($voyages as $voyage)
+                        <h2>{{ $voyage->name }}</h2>
+                        <p>{{ $voyage->description }}</p>
+
                         <table>
                             <thead>
                             <tr>
-                                <th>number</th>
+                                <th>type</th>
+                                <th>transport_number</th>
+                                <th>departure_date</th>
+                                <th>arrival_date</th>
                                 <th>departure</th>
                                 <th>arrival</th>
                                 <th>seat</th>
                                 <th>gate</th>
-                                <th>baggage drop</th>
-                                <th>departure date</th>
-                                <th>arrival date</th>
-
+                                <th>baggage_drop</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($voyages_plane as $voyage)
-                                <tr>
-                                    <td>{{$voyage->number}}</td>
-                                    <td>{{$voyage->departure}}</td>
-                                    <td>{{$voyage->arrival}}</td>
-                                    <td>{{$voyage->seat}}</td>
-                                    <td>{{$voyage->gate}}</td>
-                                    <td>{{$voyage->baggage_drop}}</td>
-                                    <td>{{$voyage->departure_date}}</td>
-                                    <td>{{$voyage->arrival_date}}</td>
-                                </tr>
-                            @endforeach
+                                @foreach ($voyage->steps as $step)
+                                    <tr>
+                                        <td>{{ $step->type }}</td>
+                                        <td>{{ $step->transport_number }}</td>
+                                        <td>{{ $step->departure_date }}</td>
+                                        <td>{{ $step->arrival_date }}</td>
+                                        <td>{{ $step->departure }}</td>
+                                        <td>{{ $step->arrival }}</td>
+                                        <td>{{ $step->seat }}</td>
+                                        <td>{{ $step->gate }}</td>
+                                        <td>{{ $step->baggage_drop }}</td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
-                    </div>
-                    <div>
-                        <h2>Bus</h2>
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>number</th>
-                                <th>departure</th>
-                                <th>arrival</th>
-                                <th>departure date</th>
-                                <th>arrival date</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($voyages_bus as $voyage)
-                                <tr>
-                                    <td>{{$voyage->number}}</td>
-                                    <td>{{$voyage->departure}}</td>
-                                    <td>{{$voyage->arrival}}</td>
-                                    <td>{{$voyage->departure_date}}</td>
-                                    <td>{{$voyage->arrival_date}}</td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                        <h2>Train</h2>
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>number</th>
-                                <th>departure</th>
-                                <th>arrival</th>
-                                <th>seat</th>
-                                <th>departure date</th>
-                                <th>arrival date</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($voyages_train as $voyage)
-                                <tr>
-                                    <td>{{$voyage->number}}</td>
-                                    <td>{{$voyage->departure}}</td>
-                                    <td>{{$voyage->arrival}}</td>
-                                    <td>{{$voyage->seat}}</td>
-                                    <td>{{$voyage->departure_date}}</td>
-                                    <td>{{$voyage->arrival_date}}</td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
