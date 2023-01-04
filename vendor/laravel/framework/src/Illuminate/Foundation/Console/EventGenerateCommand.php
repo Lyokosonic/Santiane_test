@@ -2,10 +2,11 @@
 
 namespace Illuminate\Foundation\Console;
 
-use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
+use Symfony\Component\Console\Attribute\AsCommand;
 
+#[AsCommand(name: 'event:generate')]
 class EventGenerateCommand extends Command
 {
     /**
@@ -14,6 +15,17 @@ class EventGenerateCommand extends Command
      * @var string
      */
     protected $name = 'event:generate';
+
+    /**
+     * The name of the console command.
+     *
+     * This name is used to identify the command during lazy loading.
+     *
+     * @var string|null
+     *
+     * @deprecated
+     */
+    protected static $defaultName = 'event:generate';
 
     /**
      * The console command description.
@@ -27,15 +39,17 @@ class EventGenerateCommand extends Command
      *
      * @return void
      */
-    public function fire()
+    public function handle()
     {
-        $provider = $this->laravel->getProvider(EventServiceProvider::class);
+        $providers = $this->laravel->getProviders(EventServiceProvider::class);
 
-        foreach ($provider->listens() as $event => $listeners) {
-            $this->makeEventAndListeners($event, $listeners);
+        foreach ($providers as $provider) {
+            foreach ($provider->listens() as $event => $listeners) {
+                $this->makeEventAndListeners($event, $listeners);
+            }
         }
 
-        $this->info('Events and listeners generated successfully!');
+        $this->components->info('Events and listeners generated successfully.');
     }
 
     /**
@@ -47,7 +61,7 @@ class EventGenerateCommand extends Command
      */
     protected function makeEventAndListeners($event, $listeners)
     {
-        if (! Str::contains($event, '\\')) {
+        if (! str_contains($event, '\\')) {
             return;
         }
 
@@ -68,7 +82,9 @@ class EventGenerateCommand extends Command
         foreach ($listeners as $listener) {
             $listener = preg_replace('/@.+$/', '', $listener);
 
-            $this->callSilent('make:listener', ['name' => $listener, '--event' => $event]);
+            $this->callSilent('make:listener', array_filter(
+                ['name' => $listener, '--event' => $event]
+            ));
         }
     }
 }

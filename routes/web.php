@@ -1,7 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
-use App\Voyage;
+use App\Models\Voyage;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,11 +22,8 @@ Route::get('/', function (Request $request) {
     return view('welcome', compact('voyages'));
 });
 
-
-
 Auth::routes();
 
-Route::get('home', 'HomeController@index')->name('home');
+Route::get('home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::post('home', 'HomeController@create')->name('home');
-
+Route::post('home', [App\Http\Controllers\HomeController::class, 'create'])->name('home');

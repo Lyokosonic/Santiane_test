@@ -1,91 +1,52 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Dashboard</div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">{{ __('Dashboard') }}</div>
 
-                <div class="panel-body">
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-                    @if (Session::has('errors'))
-                        <div class="alert alert-danger">{{ Session::get('errors') }}</div>
-                    @endif
+                    <div class="card-body">
+                        @if (session('status'))
+                            <div class="alert alert-success" role="alert">
+                                {{ session('status') }}
+                            </div>
+                        @endif
+                        @if (session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+                        @if (session('errors'))
+                           <div class="alert alert-danger">
+                              {{ session('errors') }}
+                           </div>
+                        @endif
+                            {{ __('You are logged in!') }}
 
-                    @if (Session::has('success'))
-                        <div class="alert alert-success">{{ Session::get('success') }}</div>
-                    @endif
-
-                    <h3>Create new travel:</h3>
+                        <h3>Create new travel:</h3>
                         <form method="POST">
                             {{ csrf_field() }}
 
                             <label for="name">Name</label>
-                            <input type="text" name="name" id="name">
+                            <input type="text" name="name" id="name" class="form-control">
 
                             <label for="description">Description</label>
-                            <input type="text" name="description" id="description">
+                            <input type="text" name="description" id="description" class="form-control">
 
                             <h4>Etapes</h4>
-                            <div id="steps">
-                                @foreach (session('steps', []) as $index => $step)
-                                    <div class="step">
-                                        <div>
-                                            <label for="steps[{{ $index }}][type]">Type</label>
-                                            <input type="text" name="steps[{{ $index }}][type]" id="steps[{{ $index }}][type]" class="form-control" required>
-                                        </div>
-                                        <div>
-                                            <label for="steps[{{ $index }}][transport_number]">Transport number</label>
-                                            <input type="text" name="steps[{{ $index }}][transport_number]" id="steps[{{ $index }}][transport_number]" class="form-control" required>
-                                        </div>
-                                        <div>
-                                            <label for="steps[{{ $index }}][departure_date]">Departure date</label>
-                                            <input type="datetime-local" name="steps[{{ $index }}][departure_date]" id="steps[{{ $index }}][departure_date]" class="form-control" required>
-                                        </div>
-                                        <div>
-                                            <label for="steps[{{ $index }}][arrival_date]">Arrival date</label>
-                                            <input type="datetime-local" name="steps[{{ $index }}][arrival_date]" id="steps[{{ $index }}][arrival_date]" class="form-control" required>
-                                        </div>
-                                        <div>
-                                            <label for="steps[{{ $index }}][departure]">Departure</label>
-                                            <input type="text" name="steps[{{ $index }}][departure]" id="steps[{{ $index }}][departure]" class="form-control" required>
-                                        </div>
-                                        <div>
-                                            <label for="steps[{{ $index }}][arrival]">Arrival</label>
-                                            <input type="text" name="steps[{{ $index }}][arrival]" id="steps[{{ $index }}][arrival]" class="form-control" required>
-                                        </div>
-                                        <div>
-                                            <label for="steps[{{ $index }}][seat]">Seat</label>
-                                            <input type="text" name="steps[{{ $index }}][seat]" id="steps[{{ $index }}][seat]" class="form-control">
-                                        </div>
-                                        <div>
-                                            <label for="steps[{{ $index }}][gate]">Gate</label>
-                                            <input type="text" name="steps[{{ $index }}][gate]" id="steps[{{ $index }}][gate]" class="form-control">
-                                        </div>
-                                        <div>
-                                            <label for="steps[{{ $index }}][baggage_drop]">Baggage_drop</label>
-                                            <input type="text" name="steps[{{ $index }}][baggage_drop]" id="steps[{{ $index }}][baggage_drop]" class="form-control">
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                            <button type="button" onclick="addStep()">Add step</button>
+                            <div id="steps"></div>
+                            <button type="button" class="btn btn-primary" onclick="addStep()">Add step</button>
 
-                            <button type="submit">Create voyage</button>
+                            <button type="submit" class="btn btn-primary">Create voyage</button>
                         </form>
                         <script type="text/javascript">
-                            console.log("HERE");
                             var i = 1;
                             function addStep() {
-                                console.log("I Click");
                                 const steps = document.getElementById('steps');
                                 const step = document.createElement('div');
-                                step.innerHTML = '<div class="step">' +
+                                step.innerHTML = '<div class="step py-2">' +
                                     '<h5>Step' + i + '</h5><div><label for="steps[' + i + '][type]">Type</label>' +
                                     '<input type="text" name="steps[' + i + '][type]" id="steps[' + i + '][type]" class="form-control" required></div>' +
 
@@ -115,11 +76,15 @@
                                     '</div>';
                                 steps.appendChild(step);
                                 i++;
-                            };
+                            }
+                            function removeStep(event) {
+                                event.preventDefault();
+                                event.target.parentNode.parentNode.remove();
+                            }
                         </script>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection

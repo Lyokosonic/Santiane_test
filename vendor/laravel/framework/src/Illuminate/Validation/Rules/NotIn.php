@@ -6,6 +6,8 @@ class NotIn
 {
     /**
      * The name of the rule.
+     *
+     * @var string
      */
     protected $rule = 'not_in';
 
@@ -34,6 +36,10 @@ class NotIn
      */
     public function __toString()
     {
-        return $this->rule.':'.implode(',', $this->values);
+        $values = array_map(function ($value) {
+            return '"'.str_replace('"', '""', $value).'"';
+        }, $this->values);
+
+        return $this->rule.':'.implode(',', $values);
     }
 }

@@ -2,10 +2,9 @@
 
 namespace Illuminate\Console;
 
-use Illuminate\Support\Str;
 use InvalidArgumentException;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class Parser
 {
@@ -21,10 +20,8 @@ class Parser
     {
         $name = static::name($expression);
 
-        if (preg_match_all('/\{\s*(.*?)\s*\}/', $expression, $matches)) {
-            if (count($matches[1])) {
-                return array_merge([$name], static::parameters($matches[1]));
-            }
+        if (preg_match_all('/\{\s*(.*?)\s*\}/', $expression, $matches) && count($matches[1])) {
+            return array_merge([$name], static::parameters($matches[1]));
         }
 
         return [$name, [], []];
@@ -35,13 +32,11 @@ class Parser
      *
      * @param  string  $expression
      * @return string
+     *
+     * @throws \InvalidArgumentException
      */
     protected static function name($expression)
     {
-        if (trim($expression) === '') {
-            throw new InvalidArgumentException('Console command definition is empty.');
-        }
-
         if (! preg_match('/[^\s]+/', $expression, $matches)) {
             throw new InvalidArgumentException('Unable to determine command name from signature.');
         }
@@ -80,15 +75,17 @@ class Parser
      */
     protected static function parseArgument($token)
     {
-        list($token, $description) = static::extractDescription($token);
+        [$token, $description] = static::extractDescription($token);
 
         switch (true) {
-            case Str::endsWith($token, '?*'):
+            case str_ends_with($token, '?*'):
                 return new InputArgument(trim($token, '?*'), InputArgument::IS_ARRAY, $description);
-            case Str::endsWith($token, '*'):
+            case str_ends_with($token, '*'):
                 return new InputArgument(trim($token, '*'), InputArgument::IS_ARRAY | InputArgument::REQUIRED, $description);
-            case Str::endsWith($token, '?'):
+            case str_ends_with($token, '?'):
                 return new InputArgument(trim($token, '?'), InputArgument::OPTIONAL, $description);
+            case preg_match('/(.+)\=\*(.+)/', $token, $matches):
+                return new InputArgument($matches[1], InputArgument::IS_ARRAY, $description, preg_split('/,\s?/', $matches[2]));
             case preg_match('/(.+)\=(.+)/', $token, $matches):
                 return new InputArgument($matches[1], InputArgument::OPTIONAL, $description, $matches[2]);
             default:
@@ -104,7 +101,7 @@ class Parser
      */
     protected static function parseOption($token)
     {
-        list($token, $description) = static::extractDescription($token);
+        [$token, $description] = static::extractDescription($token);
 
         $matches = preg_split('/\s*\|\s*/', $token, 2);
 
@@ -116,10 +113,12 @@ class Parser
         }
 
         switch (true) {
-            case Str::endsWith($token, '='):
+            case str_ends_with($token, '='):
                 return new InputOption(trim($token, '='), $shortcut, InputOption::VALUE_OPTIONAL, $description);
-            case Str::endsWith($token, '=*'):
+            case str_ends_with($token, '=*'):
                 return new InputOption(trim($token, '=*'), $shortcut, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, $description);
+            case preg_match('/(.+)\=\*(.+)/', $token, $matches):
+                return new InputOption($matches[1], $shortcut, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, $description, preg_split('/,\s?/', $matches[2]));
             case preg_match('/(.+)\=(.+)/', $token, $matches):
                 return new InputOption($matches[1], $shortcut, InputOption::VALUE_OPTIONAL, $description, $matches[2]);
             default:
@@ -137,6 +136,6 @@ class Parser
     {
         $parts = preg_split('/\s+:\s+/', trim($token), 2);
 
-        return count($parts) === 2 ? $parts : [$token, null];
+        return count($parts) === 2 ? $parts : [$token, ''];
     }
 }

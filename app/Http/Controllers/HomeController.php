@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Steps;
+use App\Models\Voyage;
 use Illuminate\Http\Request;
-use App\Voyage;
-use App\Steps;
-use Validator;
 
 class HomeController extends Controller
 {
-
     /**
      * Create a new controller instance.
      *
@@ -23,16 +21,26 @@ class HomeController extends Controller
     public function create(Request $request)
     {
 
-        $name = htmlspecialchars($request->input('name'));
-        $description = htmlspecialchars($request->input('description'));
-        $steps = $request->input('steps');
-
-        // Validation des données, etc.
+        // Validation des données
+        $request->validate([
+            'name' => 'required|max:255',
+            'description' => 'required|max:255',
+            'steps' => 'required|array',
+            'steps.*.type' => 'required|max:255',
+            'steps.*.transport_number' => 'required|max:255',
+            'steps.*.departure_date' => 'required|date',
+            'steps.*.arrival_date' => 'required|date',
+            'steps.*.departure' => 'required|max:255',
+            'steps.*.arrival' => 'required|max:255',
+            'steps.*.seat' => 'nullable|max:255',
+            'steps.*.gate' => 'nullable|max:255',
+            'steps.*.baggage_drop' => 'nullable|max:255',
+        ]);
 
         // Vérifie si il y a deux étapes qui ont la même ville de départ ou d'arrivée
         $departures = [];
         $arrivals = [];
-        foreach ($steps as $step) {
+        foreach ($request->input('steps') as $step) {
             $departures[] = $step['departure'];
             $arrivals[] = $step['arrival'];
         }
@@ -40,10 +48,13 @@ class HomeController extends Controller
             return redirect()->back()->with('errors', 'Il ne faut pas passer deux fois dans la même ville !');
         }
 
-        $voyage = Voyage::create(['name' => $name, 'description' => $description]);
+        $voyage = Voyage::create([
+            'name' => htmlspecialchars($request->input('name')),
+            'description' => htmlspecialchars($request->input('description')),
+        ]);
 
-        foreach ($steps as $step) {
-            Steps::create([
+        Steps::insert(array_map(function ($step) use ($voyage) {
+            return [
                 'voyage_id' => $voyage->id,
                 'type' => htmlspecialchars($step['type']),
                 'transport_number' => htmlspecialchars($step['transport_number']),
@@ -54,16 +65,20 @@ class HomeController extends Controller
                 'seat' => htmlspecialchars($step['seat']),
                 'gate' => htmlspecialchars($step['gate']),
                 'baggage_drop' => htmlspecialchars($step['baggage_drop']),
-            ]);
-        }
+            ];
+        }, $request->input('steps')));
 
-        return redirect()->back()->with('success', 'Le voyage a été créé avec succès !');
+        // Stockage du message de succès dans la session
+        session()->flash('success', 'Le voyage a été créé avec succès !');
+
+        // Redirection vers la page précédente
+        return redirect()->back();
     }
 
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
     {
