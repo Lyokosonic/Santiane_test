@@ -22,8 +22,9 @@ class HomeController extends Controller
 
     public function create(Request $request)
     {
-        $name = $request->input('name');
-        $description = $request->input('description');
+
+        $name = htmlspecialchars($request->input('name'));
+        $description = htmlspecialchars($request->input('description'));
         $steps = $request->input('steps');
 
         // Validation des données, etc.
@@ -44,15 +45,15 @@ class HomeController extends Controller
         foreach ($steps as $step) {
             Steps::create([
                 'voyage_id' => $voyage->id,
-                'type' => $step['type'],
-                'transport_number' => $step['transport_number'],
+                'type' => htmlspecialchars($step['type']),
+                'transport_number' => htmlspecialchars($step['transport_number']),
                 'departure_date' => $step['departure_date'],
                 'arrival_date' => $step['arrival_date'],
-                'departure' => $step['departure'],
-                'arrival' => $step['arrival'],
-                'seat' => $step['seat'],
-                'gate' => $step['gate'],
-                'baggage_drop' => $step['baggage_drop'],
+                'departure' => htmlspecialchars($step['departure']),
+                'arrival' => htmlspecialchars($step['arrival']),
+                'seat' => htmlspecialchars($step['seat']),
+                'gate' => htmlspecialchars($step['gate']),
+                'baggage_drop' => htmlspecialchars($step['baggage_drop']),
             ]);
         }
 

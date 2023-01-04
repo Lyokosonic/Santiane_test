@@ -13,8 +13,8 @@
         <!-- Styles -->
         <style>
             html, body {
-                background-color: #fff;
-                color: #636b6f;
+                background-color: #fff !important;
+                color: white;
                 font-family: 'Raleway', sans-serif;
                 font-weight: 100;
                 height: 100vh;
@@ -76,7 +76,7 @@
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
+        <div class="flex-center position-ref">
             @if (Route::has('login'))
                 <div class="top-right links">
                     @if (Auth::check())
@@ -91,18 +91,6 @@
             <div class="content">
                 <div class="title m-b-md">
                     Voyages
-                </div>
-                <div class="row">
-                    <form action="{{ url('/') }}" method="GET">
-                        {{ csrf_field() }}
-                        <label for="departure_location">Lieu de départ</label>
-                        <input type="search" name="departure_location" id="departure_location" class="form-control">
-
-                        <label for="arrival_location">Lieu d'arrivée</label>
-                        <input type="search" name="arrival_location" id="arrival_location" class="form-control">
-
-                        <button type="submit">Rechercher</button>
-                    </form>
                 </div>
                 <div class="row">
                     @foreach ($voyages as $voyage)
