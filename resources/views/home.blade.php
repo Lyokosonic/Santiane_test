@@ -73,13 +73,17 @@
 
                                     '<div><label for="steps[' + i + '][baggage_drop]">Baggage drop</label>' +
                                     '<input type="text" name="steps[' + i + '][baggage_drop]" id="steps[' + i + '][baggage_drop]" class="form-control"></div>' +
+                                    '</div>' +
+
+                                    '<button type="button" class="btn btn-danger" onclick="removeStep(event)">Remove step</button>' +
                                     '</div>';
                                 steps.appendChild(step);
                                 i++;
                             }
                             function removeStep(event) {
                                 event.preventDefault();
-                                event.target.parentNode.parentNode.remove();
+                                event.target.parentNode.remove();
+                                i--;
                             }
                         </script>
                     </div>
